@@ -10,7 +10,7 @@ configMapGenerator:
 images:
   - name: ghcr.io/rparmer/podinfo
     newName: ghcr.io/rparmer/podinfo # {"$imagepolicy": "dev:podinfo:name"}
-    newTag: v1.0.3 # {"$imagepolicy": "dev:podinfo:tag"}
+    newTag: main # {"$imagepolicy": "dev:podinfo:tag"}
 replacements:
   # - source:
   #     kind: ConfigMap
