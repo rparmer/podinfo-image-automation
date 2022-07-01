@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: podinfo
-        image: ghcr.io/rparmer/podinfo:main
+        image: ghcr.io/rparmer/podinfo-image-automation:latest
         imagePullPolicy: IfNotPresent
         ports:
         - name: http

@@ -24,8 +24,6 @@ jobs:
     permissions:
       contents: read
       packages: write
-    outputs:
-      tag: ${{ steps.meta.outputs.tags }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -51,8 +49,6 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          flavor: |
-            latest=false
           tags: |
             type=ref,suffix=-{{date 'X'}},event=branch
             type=ref,event=tag
@@ -88,7 +84,7 @@ jobs:
           retention-days: 5
   release-dev:
     if: ${{ github.event_name != 'pull_request' }}
-    needs: [docker, kustomize]
+    needs: [kustomize]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -106,7 +102,7 @@ jobs:
           git config user.email rparmer02@gmail.com
       - name: Release to dev
         env:
-          RELEASE: ${{ needs.docker.outputs.tag }}
+          RELEASE: ${{ github.ref_name }}
         run: |
           mv app.yaml dev/app.yaml
           git add dev/app.yaml
