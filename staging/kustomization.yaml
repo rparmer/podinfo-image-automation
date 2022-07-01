@@ -6,4 +6,4 @@ resources:
 images:
   - name: ghcr.io/rparmer/podinfo-image-automation
     newName: ghcr.io/rparmer/podinfo-image-automation # {"$imagepolicy": "staging:podinfo-image-automation:name"}
-    newTag: main-1656704279 # {"$imagepolicy": "staging:podinfo-image-automation:tag"}
+    newTag: v1.0.0 # {"$imagepolicy": "staging:podinfo-image-automation:tag"}
