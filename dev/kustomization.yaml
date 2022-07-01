@@ -8,9 +8,9 @@ configMapGenerator:
     envs:
       - image.env
 images:
-  - name: ghcr.io/rparmer/podinfo
-    newName: ghcr.io/rparmer/podinfo # {"$imagepolicy": "dev:podinfo:name"}
-    newTag: main # {"$imagepolicy": "dev:podinfo:tag"}
+  - name: ghcr.io/rparmer/podinfo-image-automation
+    newName: ghcr.io/rparmer/podinfo-image-automation # {"$imagepolicy": "dev:podinfo-image-automation:name"}
+    newTag: main-1656703597 # {"$imagepolicy": "dev:podinfo-image-automation:tag"}
 replacements:
   # - source:
   #     kind: ConfigMap
