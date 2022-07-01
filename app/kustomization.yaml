@@ -4,4 +4,4 @@ resources:
   - deployment.yaml
   - service.yaml
 commonLabels:
-  app: podinfo
+  app: podinfo-image-automation
