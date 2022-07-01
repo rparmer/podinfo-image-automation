@@ -114,12 +114,12 @@ jobs:
     permissions:
       packages: write
     steps:
-      uses: snok/container-retention-policy@v1
-      with:
-        image-names: ${{ github.event.repository.name }}
-        cut-off: now UTC
-        timestamp-to-use: created_at
-        account-type: personal
-        keep-at-least: 3
-        skip-tags: latest, v*
-        token: ${{ secrets.PAT_TOKEN }}
+      - uses: snok/container-retention-policy@v1
+        with:
+          image-names: ${{ github.event.repository.name }}
+          cut-off: now UTC
+          timestamp-to-use: created_at
+          account-type: personal
+          keep-at-least: 3
+          skip-tags: latest, v*
+          token: ${{ secrets.PAT_TOKEN }}
