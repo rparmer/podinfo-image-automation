@@ -54,7 +54,7 @@ jobs:
           flavor: |
             latest=false
           tags: |
-            type=ref,suffix={{date +'%s'}},event=branch
+            type=ref,suffix=-${{date +'%s'}},event=branch
             type=ref,event=tag
             type=ref,event=pr
 
