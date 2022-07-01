@@ -2,38 +2,35 @@
 apiVersion: image.toolkit.fluxcd.io/v1beta1
 kind: ImageRepository
 metadata:
-  name: podinfo
-  namespace: dev
+  name: podinfo-image-automation
+  namespace: flux-system
 spec:
   interval: 1m
-  image: ghcr.io/rparmer/podinfo
-  # secretRef:
-  #   name: regcred
+  image: ghcr.io/rparmer/podinfo-image-automation
   accessFrom:
     namespaceSelectors:
-      - matchLabels:
-          kubernetes.io/metadata.name: flux-system
+      - matchLabels: {} # allow all namespaces
 ---
 apiVersion: image.toolkit.fluxcd.io/v1beta1
 kind: ImagePolicy
 metadata:
-  name: podinfo
+  name: podinfo-image-automation
   namespace: dev
 spec:
   imageRepositoryRef:
-    name: podinfo
-    namespace: dev
+    name: podinfo-image-automation
+    namespace: flux-system
   filterTags:
-    pattern: '^v(?P<version>.*)'
-    extract: '$version'
+    pattern: '^main-(?P<ts>.*)'
+    extract: '$ts'
   policy:
-    semver:
-      range: '>=1.0.0'
+    numerical:
+      order: asc
 ---
 apiVersion: image.toolkit.fluxcd.io/v1beta1
 kind: ImageUpdateAutomation
 metadata:
-  name: podinfo
+  name: podinfo-image-automation
   namespace: dev
 spec:
   sourceRef:
@@ -55,4 +52,90 @@ spec:
       messageTemplate: |
         [ci skip] An automated update from FluxBot
     push:
-      branch: release-test
+      branch: release
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta1
+kind: ImagePolicy
+metadata:
+  name: podinfo-image-automation
+  namespace: staging
+spec:
+  imageRepositoryRef:
+    name: podinfo-image-automation
+    namespace: flux-system
+  filterTags:
+    pattern: '^v(?P<version>.*)'
+    extract: '$version'
+  policy:
+    semver:
+      range: '>=1.0.0'
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta1
+kind: ImageUpdateAutomation
+metadata:
+  name: podinfo-image-automation
+  namespace: staging
+spec:
+  sourceRef:
+    kind: GitRepository
+    name: podinfo-image-automation
+    namespace: flux-system
+  interval: 1m
+  update:
+    path: ./staging
+    strategy: Setters
+  git:
+    checkout:
+      ref:
+        branch: release
+    commit:
+      author:
+        name: fluxcdbot
+        email: fluxcdbot@users.noreply.github.com
+      messageTemplate: |
+        [ci skip] An automated update from FluxBot
+    push:
+      branch: release
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta1
+kind: ImagePolicy
+metadata:
+  name: podinfo-image-automation
+  namespace: prod
+spec:
+  imageRepositoryRef:
+    name: podinfo-image-automation
+    namespace: flux-system
+  filterTags:
+    pattern: '^v(?P<version>.*)'
+    extract: '$version'
+  policy:
+    semver:
+      range: '>=1.0.0'
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta1
+kind: ImageUpdateAutomation
+metadata:
+  name: podinfo-image-automation
+  namespace: prod
+spec:
+  sourceRef:
+    kind: GitRepository
+    name: podinfo-image-automation
+    namespace: flux-system
+  interval: 1m
+  update:
+    path: ./prod
+    strategy: Setters
+  git:
+    checkout:
+      ref:
+        branch: release
+    commit:
+      author:
+        name: fluxcdbot
+        email: fluxcdbot@users.noreply.github.com
+      messageTemplate: |
+        [ci skip] An automated update from FluxBot
+    push:
+      branch: release
