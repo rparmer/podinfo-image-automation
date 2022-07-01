@@ -116,6 +116,6 @@ jobs:
     steps:
       - uses: actions/delete-package-versions@v3
         with:
-          package-name: ${{ env.IMAGE_NAME }}
+          package-name: ${{ github.event.repository.name }}
           min-versions-to-keep: 3
           ignore-versions: '^v\\d+.\\d+.\\d+'
