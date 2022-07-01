@@ -4,35 +4,35 @@ namespace: dev
 resources:
   - app.yaml
 configMapGenerator:
-  - name: podinfo-image
+  - name: podinfo-image-automation
     envs:
       - image.env
 images:
 - name: ghcr.io/rparmer/podinfo
   newName: ghcr.io/rparmer/podinfo # {"$imagepolicy": "dev:podinfo:name"}
-  newTag: v1.0.3 # {"$imagepolicy": "dev:podinfo:tag"}
+  newTag: main # {"$imagepolicy": "dev:podinfo:tag"}
 replacements:
+  # - source:
+  #     kind: ConfigMap
+  #     name: podinfo-image-automation
+  #     fieldPath: data.IMAGE_TAG
+  #   targets:
+  #     - select:
+  #         kind: Deployment
+  #         name: podinfo
+  #       fieldPaths:
+  #         - spec.template.spec.containers.[name=podinfod].image
+  #       options:
+  #         delimiter: ":"
+  #         index: 1
   - source:
       kind: ConfigMap
-      name: podinfo-image
-      fieldPath: data.IMAGE_TAG
-    targets:
-      - select:
-          kind: Deployment
-          name: podinfo
-        fieldPaths:
-          - spec.template.spec.containers.[name=podinfod].image
-        options:
-          delimiter: ":"
-          index: 1
-  - source:
-      kind: ConfigMap
-      name: podinfo-image
+      name: podinfo-image-automation
       fieldPath: data.IMAGE_TIMESTAMP
     targets:
       - select:
           kind: Deployment
-          name: podinfo
+          name: podinfo-image-automation
         fieldPaths:
           - spec.template.metadata.labels.[image.timestamp]
         options:
@@ -44,4 +44,4 @@ patches:
         value: Always
     target:
       kind: Deployment
-      name: podinfo
+      name: podinfo-image-automation
