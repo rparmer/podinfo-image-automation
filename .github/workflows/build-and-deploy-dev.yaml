@@ -108,3 +108,14 @@ jobs:
           git add dev/app.yaml
           git diff-index --quiet HEAD || git commit -m "Release $RELEASE to dev"
           git push
+  docker-cleanup:
+    needs: [docker]
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - uses: actions/delete-package-versions@v3
+        with:
+          package-name: ${{ env.IMAGE_NAME }}
+          min-versions-to-keep: 3
+          ignore-versions: '^v\\d+.\\d+.\\d+'
