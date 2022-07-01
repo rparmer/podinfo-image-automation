@@ -1,0 +1,47 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: dev
+resources:
+  - app.yaml
+configMapGenerator:
+  - name: podinfo-image
+    envs:
+      - image.env
+images:
+- name: ghcr.io/rparmer/podinfo
+  newName: ghcr.io/rparmer/podinfo # {"$imagepolicy": "dev:podinfo:name"}
+  newTag: v1.0.3 # {"$imagepolicy": "dev:podinfo:tag"}
+replacements:
+  - source:
+      kind: ConfigMap
+      name: podinfo-image
+      fieldPath: data.IMAGE_TAG
+    targets:
+      - select:
+          kind: Deployment
+          name: podinfo
+        fieldPaths:
+          - spec.template.spec.containers.[name=podinfod].image
+        options:
+          delimiter: ":"
+          index: 1
+  - source:
+      kind: ConfigMap
+      name: podinfo-image
+      fieldPath: data.IMAGE_TIMESTAMP
+    targets:
+      - select:
+          kind: Deployment
+          name: podinfo
+        fieldPaths:
+          - spec.template.metadata.labels.[image.timestamp]
+        options:
+          create: true
+patches:
+  - patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/imagePullPolicy
+        value: Always
+    target:
+      kind: Deployment
+      name: podinfo
