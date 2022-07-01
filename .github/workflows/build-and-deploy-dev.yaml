@@ -120,6 +120,6 @@ jobs:
           cut-off: now UTC
           timestamp-to-use: created_at
           account-type: personal
-          keep-at-least: 3
+          keep-at-least: 5
           skip-tags: latest, v*
           token: ${{ secrets.PAT_TOKEN }}
