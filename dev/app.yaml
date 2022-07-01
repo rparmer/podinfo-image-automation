@@ -53,7 +53,7 @@ spec:
         - --level=info
         - --random-delay=false
         - --random-error=false
-        image: ghcr.io/rparmer/podinfo:main
+        image: ghcr.io/rparmer/podinfo-image-automation:latest
         imagePullPolicy: IfNotPresent
         livenessProbe:
           exec:
@@ -64,7 +64,7 @@ spec:
             - localhost:9898/healthz
           initialDelaySeconds: 5
           timeoutSeconds: 5
-        name: podinfod
+        name: podinfo
         ports:
         - containerPort: 9898
           name: http
