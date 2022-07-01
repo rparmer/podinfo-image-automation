@@ -2,8 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: podinfo
-  name: podinfo
+    app: podinfo-image-automation
+  name: podinfo-image-automation
 spec:
   ports:
   - name: http
@@ -15,22 +15,22 @@ spec:
     protocol: TCP
     targetPort: grpc
   selector:
-    app: podinfo
+    app: podinfo-image-automation
   type: ClusterIP
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: podinfo
-  name: podinfo
+    app: podinfo-image-automation
+  name: podinfo-image-automation
 spec:
   minReadySeconds: 3
   progressDeadlineSeconds: 60
   revisionHistoryLimit: 5
   selector:
     matchLabels:
-      app: podinfo
+      app: podinfo-image-automation
   strategy:
     rollingUpdate:
       maxUnavailable: 0
@@ -41,7 +41,7 @@ spec:
         prometheus.io/port: "9797"
         prometheus.io/scrape: "true"
       labels:
-        app: podinfo
+        app: podinfo-image-automation
     spec:
       containers:
       - command:
@@ -53,7 +53,7 @@ spec:
         - --level=info
         - --random-delay=false
         - --random-error=false
-        image: ghcr.io/rparmer/podinfo:main
+        image: ghcr.io/rparmer/podinfo-image-automation:latest
         imagePullPolicy: IfNotPresent
         livenessProbe:
           exec:
@@ -64,7 +64,7 @@ spec:
             - localhost:9898/healthz
           initialDelaySeconds: 5
           timeoutSeconds: 5
-        name: podinfod
+        name: podinfo
         ports:
         - containerPort: 9898
           name: http
