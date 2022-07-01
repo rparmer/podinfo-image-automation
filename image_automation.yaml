@@ -1,0 +1,58 @@
+apiVersion: image.toolkit.fluxcd.io/v1beta1
+kind: ImageRepository
+metadata:
+  name: podinfo
+  namespace: dev
+spec:
+  interval: 1m
+  image: ghcr.io/rparmer/podinfo
+  # secretRef:
+  #   name: regcred
+  # accessFrom:
+  #   namespaceSelectors:
+  #     - matchLabels:
+  #         kubernetes.io/metadata.name: flux-system
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta1
+kind: ImagePolicy
+metadata:
+  name: podinfo
+  namespace: dev
+spec:
+  imageRepositoryRef:
+    name: podinfo
+    namespace: dev
+  filterTags:
+    pattern: '^v(?P<version>.*)'
+    extract: '$version'
+  policy:
+    semver:
+      range: '>=1.0.0'
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta1
+kind: ImageUpdateAutomation
+metadata:
+  name: podinfo
+  namespace: dev
+spec:
+  sourceRef:
+    kind: GitRepository
+    name: podinfo
+    namespace: flux-system
+  interval: 1m
+  update:
+    path: ./dev
+    strategy: Setters
+  git:
+    checkout:
+      ref:
+        branch: release
+    commit:
+      author:
+        name: fluxcdbot
+        email: fluxcdbot@users.noreply.github.com
+      messageTemplate: |
+        An automated update from FluxBot
+        [ci skip]        
+    push:
+      branch: release
