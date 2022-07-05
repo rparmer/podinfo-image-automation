@@ -5,5 +5,4 @@ resources:
   - app.yaml
 images:
   - name: ghcr.io/rparmer/podinfo-image-automation
-    newName: ghcr.io/rparmer/podinfo-image-automation # {"$imagepolicy": "prod:podinfo-image-automation:name"}
     newTag: v1.0.0 # {"$imagepolicy": "prod:podinfo-image-automation:tag"}
