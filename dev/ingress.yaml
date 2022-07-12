@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: dev-ingress
+spec:
+  rules:
+  - host: podinfo-image-automation-dev.localhost
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: podinfo-image-automation
+            port:
+              name: http
