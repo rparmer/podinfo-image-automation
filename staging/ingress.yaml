@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: podinfo-image-automation-ingress
+  name: podinfo-image-automation
 spec:
   rules:
   - host: podinfo-image-automation-staging.localhost
