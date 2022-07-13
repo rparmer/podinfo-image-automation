@@ -6,4 +6,4 @@ resources:
 - ingress.yaml
 images:
 - name: ghcr.io/rparmer/podinfo-image-automation
-  newTag: v1.0.1 # {"$imagepolicy": "prod:podinfo-image-automation:tag"}
+  newTag: v1.0.0 # {"$imagepolicy": "prod:podinfo-image-automation:tag"}
